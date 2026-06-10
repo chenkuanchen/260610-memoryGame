@@ -1,0 +1,259 @@
+/* ============================================================
+   翻牌記憶遊戲 — 8-bit 風格樣式
+   字體：Press Start 2P
+   ============================================================ */
+
+/* ---- 色票（依設計資訊） ---- */
+:root {
+    --yellow:        #F99700;
+    --yellow-light:  #E2B665;
+    --blue:          #0191FD;
+    --blue-light:    #65C9E2;
+    --red:           #F34D43;
+    --green:         #3D7A61;
+  
+    /* 介面底色（依草稿補充） */
+    --sidebar:       #2C343B;  /* 側邊欄深底 */
+    --panel:         #353E45;  /* 面板底 */
+    --panel-inset:   #262D33;  /* 凹陷數值框 */
+    --ink:           #15191D;  /* 8-bit 描邊/陰影用的「黑」 */
+    --white:         #FFFFFF;
+  
+    /* 立體量（控制按鈕厚度） */
+    --edge: 6px;
+    --border: 4px;
+  }
+  
+  /* ---- 基礎重置 + 像素化 ---- */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  html, body { height: 100%; }
+  
+  body {
+    font-family: 'Press Start 2P', monospace;
+    -webkit-font-smoothing: none;      /* 關閉字型抗鋸齒，保留像素感 */
+    image-rendering: pixelated;
+    color: var(--white);
+    background: var(--sidebar);
+  }
+  
+  img { image-rendering: pixelated; }   /* PNG 放大不糊 */
+  
+  /* ============================================================
+     版面：左欄 + 右牌桌
+     ============================================================ */
+  .game {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .sidebar {
+    width: 460px;
+    flex-shrink: 0;
+    background: var(--sidebar);
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 22px;
+  }
+  
+  .board-area {
+    flex: 1;
+    background: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+  
+  /* ============================================================
+     8-bit 立體區塊（共用）
+     作法：實心描邊 + 無模糊的底部硬陰影 +
+          內側上緣高光 / 下緣暗邊，形成方塊立體感
+     ============================================================ */
+  .block {
+    border: var(--border) solid var(--ink);
+    border-radius: 8px;
+    box-shadow:
+      0 var(--edge) 0 0 var(--ink),                 /* 底部硬陰影 */
+      inset 0  4px 0 0 rgba(255, 255, 255, 0.22),   /* 上緣高光 */
+      inset 0 -4px 0 0 rgba(0, 0, 0, 0.22);         /* 下緣暗邊 */
+  }
+  
+  /* ---- 剩餘次數面板 ---- */
+  .timer {
+    display: flex;
+    align-items: stretch;
+    gap: 14px;
+    background: var(--panel);
+    border: var(--border) solid var(--ink);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  
+  .timer__box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--panel-inset);
+    border-radius: 8px;
+    /* 凹陷感：內側暗邊在上、高光在下 */
+    box-shadow:
+      inset 0  4px 0 0 rgba(0, 0, 0, 0.35),
+      inset 0 -3px 0 0 rgba(255, 255, 255, 0.06);
+    padding: 18px 10px;
+    font-size: 22px;
+  }
+  
+  .timer__label {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    line-height: 1.5;
+    text-align: right;
+  }
+  
+  /* ============================================================
+     統計：Moves / Matches
+     ============================================================ */
+  .stats {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .stat {
+    flex: 1;
+    border: var(--border) solid var(--ink);
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow:
+      0 var(--edge) 0 0 var(--ink),
+      inset 0  4px 0 0 rgba(255, 255, 255, 0.25),
+      inset 0 -4px 0 0 rgba(0, 0, 0, 0.18);
+  }
+  
+  .stat--moves   { background: var(--blue); }
+  .stat--matches { background: var(--yellow); }
+  
+  .stat__label {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.25);
+  }
+  
+  .stat__box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    padding: 14px 0;
+    font-size: 18px;
+    box-shadow:
+      inset 0  3px 0 0 rgba(255, 255, 255, 0.30),
+      inset 0 -3px 0 0 rgba(0, 0, 0, 0.18);
+  }
+  
+  .stat--moves   .stat__box { background: var(--blue-light); }
+  .stat--matches .stat__box { background: var(--yellow-light); }
+  
+  /* ============================================================
+     按鈕（可按壓的 8-bit 立體效果）
+     ============================================================ */
+  .btn {
+    font-family: inherit;
+    color: var(--white);
+    font-size: 18px;
+    line-height: 1.4;
+    padding: 18px 16px;
+    border: var(--border) solid var(--ink);
+    border-radius: 10px;
+    cursor: pointer;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.30);
+    box-shadow:
+      0 var(--edge) 0 0 var(--ink),
+      inset 0  4px 0 0 rgba(255, 255, 255, 0.25),
+      inset 0 -4px 0 0 rgba(0, 0, 0, 0.20);
+    transition: transform 0.04s steps(1), box-shadow 0.04s steps(1);
+  }
+  
+  .btn--restart { background: var(--red); }
+  
+  /* 按下：整顆往下沉，底部硬陰影歸零 → 真實按壓感 */
+  .btn:active {
+    transform: translateY(var(--edge));
+    box-shadow:
+      0 0 0 0 var(--ink),
+      inset 0  4px 0 0 rgba(255, 255, 255, 0.25),
+      inset 0 -4px 0 0 rgba(0, 0, 0, 0.20);
+  }
+  
+  .btn:focus-visible {
+    outline: 3px solid var(--white);
+    outline-offset: 3px;
+  }
+  
+  /* ============================================================
+     牌桌與卡牌
+     ============================================================ */
+  .board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 36px;
+    width: min(45%, 620px);
+  }
+  
+  .card {
+    aspect-ratio: 3 / 4;
+    perspective: 800px;     /* 翻面 3D 透視 */
+    cursor: pointer;
+  }
+  
+  .card__inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+  }
+  
+  /* 由 JS 加上 .is-flipped 來翻面 */
+  .card.is-flipped .card__inner { transform: rotateY(180deg); }
+  
+  .card__face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    border-radius: 8px;
+    overflow: hidden;
+    /* 卡牌微立體：底部硬陰影 */
+    box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.30);
+  }
+  
+  .card__face img {
+    width: 110%;
+    height: 110%;
+    object-fit: contain;
+    /* padding: 8%; */
+  }
+  
+  /* 背面（圖案）預設朝上；正面（PNG）旋轉到背側 */
+  .card__front { transform: rotateY(180deg); }
+  
+  /* 已配對：可做淡出/標記，這裡先給半透明，細節由你調整 */
+  .card.is-matched { opacity: 0.55; cursor: default; }
+  
+  /* ============================================================
+     簡易響應式（窄螢幕改為上下堆疊）
+     ============================================================ */
+  @media (max-width: 720px) {
+    .game { flex-direction: column; }
+    .sidebar { width: 100%; }
+    .board { width: 100%; }
+  }

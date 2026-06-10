@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>翻牌記憶遊戲</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./memoryGame.css" />
+</head>
+<body>
+  <div class="game">
+
+    <!-- ===== 左側資訊欄 ===== -->
+    <aside class="sidebar">
+
+      <!-- 剩餘次數 -->
+      <div class="timer">
+        <div class="timer__box"><span id="timer">∞</span></div>
+        <div class="timer__label">Pairs<br />Left</div>
+      </div>
+
+      <!-- 統計：Moves / Matches -->
+      <div class="stats">
+        <div class="stat stat--moves">
+          <div class="stat__label">Moves</div>
+          <div class="stat__box"><span id="moves">0</span></div>
+        </div>
+        <div class="stat stat--matches">
+          <div class="stat__label">Matches</div>
+          <div class="stat__box"><span id="matches">0</span></div>
+        </div>
+      </div>
+
+      <!-- 重新開始 -->
+      <button class="btn btn--restart" id="restart">Restart game</button>
+
+    </aside>
+
+    <!-- ===== 右側牌桌 ===== -->
+    <main class="board-area">
+      <!-- 卡牌由 game.js 動態產生（renderBoard） -->
+      <div class="board" id="board"></div>
+    </main>
+
+  </div>
+
+  <script src="memoryGame.js"></script>
+</body>
+</html>
